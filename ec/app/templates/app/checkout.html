@@ -1,0 +1,121 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% block title %} buy now {% endblock title %}
+
+
+{% block usernav %}
+<li class="nav-item">
+  <a class="nav-link active" aria-current="page" href="/">Home</a>
+</li>
+
+<li class="nav-item dropdown mx-2">
+  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+      Products
+  </a>
+
+  <ul class="dropdown-menu">
+    <li><a class="dropdown-item" href="{% url 'category' 'ML' %}">Milk</a></li>
+    <li><a class="dropdown-item" href="{% url 'category' 'CR' %}">Curd</a></li>
+    <li><a class="dropdown-item" href="{% url 'category' 'MS' %}">Milkshake</a></li>
+    <li><a class="dropdown-item" href="{% url 'category' 'LS' %}">Lassi</a></li>
+    <li><a class="dropdown-item" href="{% url 'category' 'GH' %}">Ghee</a></li>
+    <li><a class="dropdown-item" href="{% url 'category' 'PN' %}">Paneer</a></li>
+    <li><a class="dropdown-item" href="{% url 'category' 'CZ' %}">Cheese</a></li>
+    <li><a class="dropdown-item" href="{% url 'category' 'Ic' %}">Ice-Cream</a></li>
+    
+  </ul>
+</li>
+<li class="nav-item">
+  <a class="nav-link text-white" href="{% url 'about'  %}">About Us</a>
+</li>
+<li class="nav-item">
+  <a class="nav-link text-white" href="{% url 'contact'  %}">Contact Us</a>
+</li>
+<li class="nav-item">
+  <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+</li>
+</ul>
+<form class="d-flex" role="search" action="/search">
+  <input class="form-control me-2" type="search" placeholder="Search"  name="search" aria-label="Search">
+  <button class="btn btn-outline-dark" type="submit">Search</button>
+</form>
+</div>
+<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+<li class="nav-item dropdown mx-2">
+  <a class="nav-link dropdown-toggle text-white" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+  <i class="fa-regular fa-user"></i> {{request.user}}
+
+  </a>
+  <ul class="dropdown-menu " aria-labelledby="profileDropdown" >
+      <li><a class="dropdown-item" href="{% url 'profile' %}">Profile</a></li>
+      <li><a class="dropdown-item" href="{% url 'passwordchange' %}">Change Password</a></li>
+      <li><a class="dropdown-item" href="/logout/">Logout</a></li>
+  </ul>
+
+</li>
+<li class="nav-item mx-2">
+  <a href="{% url 'showcart' %}" class="nav-link text-white"><span class="badge bg-danger">{% if totalitem > 0 %}{{totalitem}}{% endif %}</span> <i class="fa-solid fa-cart-shopping"  ></i> </a>
+
+</li>
+<li class="nav-item mx-2">
+  <a href="" class="nav-link text-white"><span class="badge bg-danger">{% if  wishlist_count > 0 %}{{ wishlist_count}}{% endif %}</span> <i class="fa fa-heart"></i> </a>
+
+</li>
+{% endblock %}
+
+{% block main-content %}
+<div class="container">
+    {% if messages %}
+        {% for msg in messages %}
+           <div class="alert alert-danger" role="alert">
+               {{msg}}
+           </div>
+        {% endfor  %}
+    {% endif %}
+   <div class="row mt-5">
+    <div class="col-sm-6">
+        <h4>order summary</h4>
+        <hr>
+        {% for item in cart_items %}
+          <div class="card mb-2">
+            <div class="card-body">
+                <h5>Product: {{item.product.title}}</h5>
+                <p>Quantity: {{item.quantity}}</p>
+                <p class="fw-bold">Price:{{item.product.discounted_price}}</p>
+            </div>
+          </div>
+          {% endfor %}
+          <p class="fw-bold">Total Cost + Rs. 40 = {{totalamount}}</p>
+          <small>Term and condition:Lorem ipum dolor sit amet consector adipiscing</small>
+    </div>
+    <div class="col-sm-4 offset-sm-1">
+        <h4>Select Shipping Address</h4>
+        <hr>
+        <form method="post" id="myform">
+            {% csrf_token %}
+            {% for ad in add %}
+            <div class="card">
+                <div class="card-body">
+                    <h5>{{ad.name}}</h5>
+                    <p>Mobile:{{ad.mobile}}</p>
+                    <p>{{ad.locality}} {{ad.state}}-{{ad.zipcode}}</p>
+                </div>
+            </div>
+              <div class="form-check mt-2 mb-5">
+                <input class="form-check-input" type="radio" name="custid" id="custadd {{forloop.counter}}" value="{{ad.id}}">
+                <label class="form-check-label fw-bold" for="custadd{{forloop.counter}}">Address:{{forloop.counter}}</label>
+              </div>
+            {% endfor %}
+            <div class="form-check mb-3">
+                <label for="totamount" class="form-label">Total Amount</label>
+                <input type="number" class="form-control" name="totamount" value={{totalamount}} readonly>
+            </div>
+            <div class="text-end">
+                <!-- <button id="rzp-button1" type="submit" class="btn btn-warning mt-3 px-5 fw-bold">Continue</button> -->
+            <a href="/pay"  id="rzp-button1" class="btn btn-success">Payment</a>
+            </div>
+        </form>
+    </div>
+   </div>
+</div>
+{% endblock %}

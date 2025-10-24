@@ -1,0 +1,39 @@
+{% extends 'app/base.html' %} {% load static %} 
+{% block title %}Contact-Us 
+{% endblock title %} 
+
+{% block main-content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8">
+            <h2 class="text-center mb-4">Get In Touch</h2>
+            <form>
+                <div class="mb-3">
+                    <label for="contactName" class="form-label">Full Name</label>
+                    <input type="text" class="form-control" id="contactName" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="contactEmail" class="form-label">Email Address</label>
+                    <input type="email" class="form-control" id="contactEmail" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="contactSubject" class="form-label">Subject (Optional)</label>
+                    <input type="text" class="form-control" id="contactSubject">
+                </div>
+
+                <div class="mb-3">
+                    <label for="contactMessage" class="form-label">Message</label>
+                    <textarea class="form-control" id="contactMessage" rows="4" required></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100">Send Message</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<br><br>
+{% endblock main-content %}
+

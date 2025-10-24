@@ -1,0 +1,86 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% block title %} Search Result {% endblock %}
+{% block usernav %}
+<li class="nav-item">
+  <a class="nav-link active" aria-current="page" href="/">Home</a>
+</li>
+
+<li class="nav-item dropdown mx-2">
+  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+      Products
+  </a>
+
+  <ul class="dropdown-menu">
+    <li><a class="dropdown-item" href="{% url 'category' 'ML' %}">Milk</a></li>
+    <li><a class="dropdown-item" href="{% url 'category' 'CR' %}">Curd</a></li>
+    <li><a class="dropdown-item" href="{% url 'category' 'MS' %}">Milkshake</a></li>
+    <li><a class="dropdown-item" href="{% url 'category' 'LS' %}">Lassi</a></li>
+    <li><a class="dropdown-item" href="{% url 'category' 'GH' %}">Ghee</a></li>
+    <li><a class="dropdown-item" href="{% url 'category' 'PN' %}">Paneer</a></li>
+    <li><a class="dropdown-item" href="{% url 'category' 'CZ' %}">Cheese</a></li>
+    <li><a class="dropdown-item" href="{% url 'category' 'Ic' %}">Ice-Cream</a></li>
+    
+  </ul>
+</li>
+<li class="nav-item">
+  <a class="nav-link text-white" href="{% url 'about'  %}">About Us</a>
+</li>
+<li class="nav-item">
+  <a class="nav-link text-white" href="{% url 'contact'  %}">Contact Us</a>
+</li>
+<li class="nav-item">
+  <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+</li>
+</ul>
+<form class="d-flex" role="search" action="/search">
+  <input class="form-control me-2" type="search" placeholder="Search"  name="search" aria-label="Search">
+  <button class="btn btn-outline-dark" type="submit">Search</button>
+</form>
+</div>
+<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+<li class="nav-item dropdown mx-2">
+  <a class="nav-link dropdown-toggle text-white" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    <i class="fa-regular fa-user"></i> {{request.user}}
+
+  </a>
+  <ul class="dropdown-menu " aria-labelledby="profileDropdown" >
+      <li><a class="dropdown-item" href="{% url 'profile' %}">Profile</a></li>
+      <li><a class="dropdown-item" href="{% url 'passwordchange' %}">Change Password</a></li>
+      <li><a class="dropdown-item" href="/logout/">Logout</a></li>
+  </ul>
+
+</li>
+<li class="nav-item mx-2">
+  <a href="{% url 'showcart' %}" class="nav-link text-white"><span class="badge bg-danger">{% if totalitem > 0 %}{{totalitem}}{% endif %}</span> <i class="fa-solid fa-cart-shopping"  ></i> </a>
+
+</li>
+<li class="nav-item mx-2">
+  <a href="" class="nav-link text-white"><span class="badge bg-danger">{% if  wishlist_count > 0 %}{{ wishlist_count}}{% endif %}</span> <i class="fa fa-heart"></i> </a>
+
+</li>
+{% endblock %}
+{% block main-content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-sm-8">
+            <div class="row">
+                {% for prod in product %}
+                   <div class="col-sm-4 text-center mb-4 hover-shadow">
+                      <a href="{% url 'product-detail' prod.id %}" class="btn">
+                        <div>
+                            <img src="{{prod.product_image.url}}" width="300px" height="200px" />
+                            <div class="fw-bold">{{prod.title}}</div>
+                            <div class="fw-bold text-danger">
+                                Rs.{{prod.discounted_price}}/-
+                                <small class="fw-light text-decoration-line-through">{{prod.selling_price}}</small>
+                            </div>
+                        </div>
+                      </a>
+                   </div>
+                {% endfor %}   
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock main-content %}
